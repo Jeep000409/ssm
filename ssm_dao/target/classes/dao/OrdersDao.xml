@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrdersDao">
+    <resultMap id="orderMap" type="orders">
+        <id column="id" property="id"></id>
+        <result column="orderNum" property="orderNum"></result>
+        <result column="orderTime" property="orderTime"></result>
+        <result column="peopleCount" property="peopleCount"></result>
+        <result column="payType" property="payType"></result>
+        <result column="orderStatus" property="orderStatus"></result>
+        <result column="ordersDesc" property="ordersDesc"></result>
+<!--        映射产品属性-->
+<!--        一对一映射:association-->
+<!--        一对多映射:collection-->
+<!--        property:属性名-->
+<!--        column:列名（把列值作为参数查询产品对象）-->
+<!--        javaType:属性的类型-->
+<!--        select:名称空间+id=接口全类名+方法名-->
+      <association property="product" column="productId" javaType="product" select="com.dao.ProductDao.findById"></association>
+    </resultMap>
+
+    <select id="findOrdersAll" resultMap="orderMap">
+        select * from orders
+    </select>
+
+    <insert id="insertOrders">
+        insert into orders values(
+        null ,
+        #{orderNum},
+        #{orderTime},
+        #{peopleCount},
+        #{payType},
+        #{orderStatus},
+        #{ordersDesc},
+        #{product.id})
+    </insert>
+</mapper>

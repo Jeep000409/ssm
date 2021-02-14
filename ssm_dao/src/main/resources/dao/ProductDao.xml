@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ProductDao">
+<!--    查询所有-->
+    <select id="findProductAll" resultType="Product">
+        select * from product
+    </select>
+<!--    插入-->
+    <insert id="insertProduct" >
+        insert into product values (null ,#{productNum},
+        #{productName},
+        #{cityName},
+        #{departureTime},
+        #{productPrice},
+        #{productDesc},
+        #{productStatus})
+    </insert>
+<!--    按id查询-->
+    <select id="findById" resultType="Product">
+        select * from product where id=#{id}
+    </select>
+<!--    更新-->
+    <update id="updateProduct">
+        update product set productNum=#{productNum},
+        productName=#{productName},
+        cityName=#{cityName},
+        departureTime=#{departureTime},
+        productPrice=#{productPrice},
+        productDesc=#{productDesc},
+        productStatus=#{productStatus}
+        where id=#{id}
+    </update>
+<!--    按id删除-->
+    <delete id="delById">
+        delete from product where id=#{id}
+    </delete>
+<!--    查询总条数-->
+    <select id="findTotalCount" resultType="int">
+        select count(1) from product
+    </select>
+<!--    根据分页参数查询-->
+<!--    在mybatis中引用两个以上的参数  第一个参数#{param1}   第二个参数#{param2}-->
+    <select id="findByPage" resultType="product">
+        select * from product limit #{param1},#{param2}
+    </select>
+
+</mapper>

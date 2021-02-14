@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.RoleDao">
+    <select id="findRoleAll" resultType="Role">
+        select * from sys_role
+    </select>
+    <insert id="insertRole">
+        insert into sys_role values (null ,#{roleName},#{roleDesc})
+    </insert>
+    <resultMap id="roleMap" type="Role">
+        <id property="id" column="id"></id>
+        <result property="roleName" column="roleName"></result>
+        <result property="roleDesc" column="roleDesc"></result>
+        <collection property="permissionList"
+                    ofType="permission"
+                    fetchType="lazy"
+                    column="id"
+                    select="com.dao.PermissionDao.findPermissionByRoleId"></collection>
+    </resultMap>
+    <select id="findRoleByUserId" resultMap="roleMap">
+        SELECT r.* FROM
+        sys_user_role ur,sys_role r
+        WHERE ur.roleId=r.id
+        and ur.userId=#{userId}
+    </select>
+    <select id="findById" resultMap="roleMap">
+        select * from sys_role where id=#{id}
+    </select>
+    <delete id="delRoleFromPermission">
+        delete from sys_role_permission where roleId=#{roleId}
+    </delete>
+    <insert id="addRoleToPermission">
+        insert into sys_role_permission values (#{param1},#{param2})
+    </insert>
+</mapper>

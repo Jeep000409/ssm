@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserDao">
+
+    <select id="findByUsername" resultMap="userMap">
+        select * from sys_user where username=#{username} and status = 1
+    </select>
+
+    <select id="findUserAll" resultType="SysUser">
+          select * from sys_user
+    </select>
+    <insert id="insertUser">
+        insert into sys_user values (null ,#{username},#{email},#{password},#{phoneNum},#{status})
+    </insert>
+    <select id="findByUsernameCheck" resultType="SysUser">
+        select username from sys_user where username=#{username}
+    </select>
+
+<!--    如果表的列名和实体类的属性不一致的时候，需要手动映射-->
+    <resultMap id="userMap" type="sysUser">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="email" column="email"></result>
+        <result property="phoneNum" column="phoneNum"></result>
+        <result property="password" column="password"></result>
+        <result property="status" column="status"></result>
+<!--        映射roleList属性，集合类型
+            collection:映射集合属性
+            ofType: 集合泛型
+            column:对应表中某列-作为方法的参数
+            select:namespace+id=接口的全名称+方法名=方法的全名称
+            -->
+        <collection property="roleList"
+                    ofType="role"
+                    fetchType="lazy"
+                    column="id"
+                    select="com.dao.RoleDao.findRoleByUserId"></collection>
+    </resultMap>
+    <select id="findById" resultMap="userMap">
+        select * from sys_user where id=#{id}
+    </select>
+    <delete id="delRoleFromUser">
+        delete  from sys_user_role where userId=#{userId}
+    </delete>
+    <insert id="addRoleToUser">
+        insert into sys_user_role values (#{param1},#{param2})
+    </insert>
+</mapper>

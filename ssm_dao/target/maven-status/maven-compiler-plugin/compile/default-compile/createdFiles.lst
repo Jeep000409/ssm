@@ -1,0 +1,6 @@
+com\dao\ProductDao.class
+com\dao\RoleDao.class
+com\dao\UserDao.class
+com\dao\LogDao.class
+com\dao\OrdersDao.class
+com\dao\PermissionDao.class

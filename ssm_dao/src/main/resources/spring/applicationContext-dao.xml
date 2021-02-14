@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--引入数据库属性文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+    <!--创建数据源对象-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+    <!--创建SqlSessionFactory对象-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--指定sql映射文件所在位置，如不指定，则需在pom.xml文件中配置resource标签进行指定-->
+        <property name="typeAliasesPackage" value="com.domain"/>
+        <property name="mapperLocations" value="classpath:dao/*.xml"/>
+        <!--        注入分页插件方法二-->
+        <property name="configLocation" value="classpath:Mybatis.xml"></property>
+<!--        注入分页插件方法一-->
+<!--        plugins:数组类型-->
+<!--        <property name="plugins">-->
+<!--            <array>-->
+<!--&lt;!&ndash;                 <value>只能注入简单类型&ndash;&gt;-->
+<!--&lt;!&ndash;                创建分页拦截器对象&ndash;&gt;-->
+<!--                <bean class="com.github.pagehelper.PageInterceptor">-->
+<!--                    <property name="properties">-->
+<!--                        <props><prop key="helperDialect">mysql</prop></props>-->
+<!--                    </property>-->
+<!--                </bean>-->
+<!--            </array>-->
+<!--        </property>-->
+    </bean>
+    <!--扫描dao包，创建动态代理-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.dao"></property>
+    </bean>
+</beans>
