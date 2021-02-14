@@ -1,0 +1,7 @@
+com\domain\Log.class
+com\domain\Orders.class
+com\domain\SysUser.class
+com\domain\PageBean.class
+com\domain\Role.class
+com\domain\Permission.class
+com\domain\Product.class
